@@ -1,0 +1,149 @@
+<%- include ../partials/header %>
+  <%- include ../partials/categories-navbar %>
+    <div class="container">
+      <!-- Flash messages -->
+      <div class="row mt-3 mb-3">
+        <div class="col-md-12 m-auto">
+          <% if (successMsg) { %>
+            <div id="success" class="alert alert-success">
+              <%= successMsg %>
+            </div>
+            <% } else { %>
+              <div id="success" class="alert alert-success d-none"></div>
+              <% } %>
+        </div>
+        <div class="col-md-12 m-auto">
+          <% if (errorMsg) { %>
+            <div id="error" class="alert alert-danger">
+              <%= errorMsg %>
+            </div>
+            <% } else { %>
+              <div id="error" class="alert alert-danger d-none"></div>
+              <% } %>
+        </div>
+      </div>
+      <!-- Product info -->
+      <div class="row mt-4 mb-4">
+        <div class="col-md-4 mt-2 mr-2 ml-auto">
+          <img src="<%=product.imagePath%>" class="img-fluid product-img" alt="product image" />
+        </div>
+        <div class="col-md-5 mt-2 mb-2 ml-2 mr-auto text-dark">
+          <h2>
+            <%=product.title%>
+          </h2>
+          <hr />
+          <p class="price">RS : <%=product.price%>
+          </p>
+          <p class="lead"> Description:
+          <p>
+            <%=product.description%>
+          </p>
+          </p>
+          <p><strong>Category:</strong>
+            <%=product.category.title%>
+          </p>
+          <p><strong>Brand: </strong>
+            <%=product.manufacturer%>
+          </p>
+          <p><strong>Product code:</strong>
+            <%=product.productCode%>
+          </p>
+          <p><strong>Date added to the store:</strong>
+            <%= moment(product.createdAt).format( 'MMMM Do YYYY' )%>
+          </p>
+          <% if(product.available) {%>
+            <p class="is-available text-center">In stock</p>
+            <a href="/add-to-cart/<%=product._id%>?addMethod=addToCart"
+              class="btn btn-block btn-secondary mt-3 mb-3 button-style">
+              Add to Shopping Cart
+            </a>
+            <a href="/add-to-cart/<%=product._id%>?addMethod=buyNow"
+              class="btn btn-block btn-secondary mt-3 mb-3 button-style">
+              Buy Now
+            </a>
+            <% } else { %>
+              <p class="is-not-available text-center">Sold out</p>
+              <%} %>
+        </div>
+
+        <div class="d-flex justify-content-center">
+          <div class="content text-center">
+            <% var count=0,rating=0,avgRating=0; %>
+            <% for(review in product.reviews) { %>
+                <% rating=rating + product.reviews[review].rating; %>
+                <% count=count+1; %>
+            <% } %>
+            <% avgRating = (rating/count) || 0 %>
+            <div class="ratings"> <span class="product-rating"><%= avgRating %></span><span>/5</span>
+              <div class="stars"> 
+                  <% var avgRate = (rating/count); %>
+                  <% for( var i=0; i < avgRate; i++) { %>
+                    <i style="color: #28a745;" class="fa fa-star"></i>
+                  <% } %>
+              </div>
+              <div class="rating-text"> <span> Based on <%= product.reviews.length %> ratings</span> </div>
+            </div>
+          </div>
+        </div>
+
+        <script type="text/javascript">
+          
+          
+          function values(){
+            comment = document.getElementById("comment").value;
+            rating = document.getElementById("rating");
+          }
+
+        </script>
+        
+        <div class="col-md-5">
+            <h2>Leave a Review?</h2>
+              <h3>
+                <input type="text" placeholder="Comment" size="50" name="comment" id="comment" required /> <br>
+                Rating: <select aria-placeholder="Rating" name="rating" id="rating">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select> <br>
+              </h3>
+              <a href="/products/review/<%= product.category[0].slug%>/<%= product._id %>" 
+              class="btn btn-primary" onClick="values();" >
+                Post my review
+              </a>
+        </div>
+
+       
+        <hr />
+        <div class="col-md-12 mt-2 mb-2 ml-2 mr-auto mt-4 mb-4">
+          <div>
+            <h2>Customer Reviews</h2>
+            <hr />
+            
+            <% for(review in product.reviews) { %>
+              <h4>
+                <div class="row reviewBox"
+                  style="background-color:#f5f4f4;"
+                >
+                <div class="col-md-3">
+                <%= product.reviews[review].name %> <br>
+                <% for( var i=0; i < product.reviews[review].rating; i++) { %>
+                  <i  class="fa fa-star"></i>
+                <% } %> <br>
+                <%= moment(product.reviews[review].date).format('MMM DD YYYY hh:mm a') %> <br>
+                </div>
+                <div class="col-md-5">
+                  <%= product.reviews[review].comment %><br>
+                </div>
+              </div>    
+              </h4>
+              <hr />
+              <% } %>
+          </div>
+        </div>
+      </div>
+
+
+
+      <%- include ../partials/footer %>

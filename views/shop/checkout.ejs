@@ -1,0 +1,171 @@
+<%- include ../partials/header %> <%- include ../partials/categories-navbar %>
+<div class="container mt-4 mb-5">
+  <!-- Flash messages -->
+  <div class="row mt-3 mb-3">
+    <div class="col-md-8 m-auto">
+      <% if (errorMsg) { %>
+      <div id="error" class="alert alert-danger">
+        <%= errorMsg %>
+      </div>
+      <% } else { %>
+      <div id="error" class="alert alert-danger d-none"></div>
+      <% } %>
+    </div>
+  </div>
+  <div class="col-md-8 m-auto">
+    <!-- Checkout form -->
+    <form action="/checkout" method="POST" id="checkout-form">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="recieverName">Reciever Name</label>
+            <input type="text" id="recieverName" name="recieverName" class="form-control" required />
+          </div>
+        </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="address">Address</label>
+            <input
+              type="text"
+              id="address"
+              class="form-control"
+              required
+              name="address"
+            />
+          </div>
+        </div>
+       
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="telnum">Contact Number (03xxXxxxxxx)</label>
+            <input type="text"  id="telnum" name="telnum" class="form-control" required />
+          </div>
+        </div>
+  
+        <div class="col-md-12">
+
+            <label style="font-size: large; font-size:25px">Payment Options</label>
+            <br>
+            <input type="button" id="cod" name="paymentMethod" value="Cash On Delivery" class="active inactive"
+            style=" margin: .4rem;  font-size: 21px; height:45px; width:250px; color:blue; font-family: sans-serif; display:inline-block; box-sizing:border-box; transition:all 0.2s; border:0.16em solid; text-align:center;padding: 5px 10px" 
+            onclick="cardOff(); setColorCOD();">
+            <br>
+            <div style="margin-left: 30px; border:soft;">
+              <label id="showCOD" style="display: none; font-size:26px">Pay with cash upon delivery</label>
+            </div>
+            <br>
+            <input type="button" id="card" name="paymentMethod" value="Pay with credit card" class="active inactive "
+            style="margin:.4rem; font-size: 21px; height:45px; width:250px; color:blue; font-family: sans-serif; display:inline-block; box-sizing:border-box; transition:all 0.2s; border:0.16em solid; text-align:center;padding: 5px 10px"
+            onclick="cardOn(); setColorCard();"/>
+
+            <input type="text" id="payMethod" name="payMethod" style="display: none;">
+            
+        </div>  
+        
+        <script type="text/javascript">
+
+          $("document").ready(function () {
+            $("#cod").trigger("click");
+          });
+         
+          function setColorCOD(){
+            var x = document.getElementById("cod");
+            if(x.style.color === "blue"){
+              x.style.color = "green";
+            }else if(x.style.color === "green"){
+              x.style.color = "blue";
+            }
+            var y = document.getElementById("card");
+            y.style.color = "blue";
+          }
+
+          function setColorCard() {
+            var x = document.getElementById("card");
+            if (x.style.color === "blue") {
+              x.style.color = "green";
+            } else if (x.style.color === "green") {
+              x.style.color = "blue";
+              x.style.display = "none";
+            }
+            var y = document.getElementById("cod");
+            y.style.color = "blue";
+          }
+
+          function cardOff() {
+            var x = document.getElementById("cardPayment");
+            x.style.display = "none";
+            var y = document.getElementById("showCOD");
+            y.style.display = "block";
+            $('#payMethod').val("COD");
+            var z = document.getElementById("card_stuff_tracker");
+            z.val = "is_off";
+            removeChild("checkout");
+          }
+
+          function cardOn(){
+            var x = document.getElementById("cardPayment");
+            x.style.display = "block";
+            var y = document.getElementById("showCOD");
+            y.style.display = "none";
+            $('#payMethod').val("card");
+            var z = document.getElementById("card_stuff_tracker");
+            z.val = "is_on";
+            addNewChild("text/javascript","javascripts/checkout.js","checkout");
+            console.log("adding this thing only");
+          }
+
+          function removeChild(id){
+            let script = document.getElementById(id);
+            if(script){
+              script.remove();
+            }
+          }
+          
+          function addNewChild(type,url,id){
+            var headID = document.getElementsByTagName("head")[0];
+            var newScript = document.createElement('script');
+            newScript.setAttribute('type',type);
+            newScript.setAttribute('src',url);
+            newScript.setAttribute('id',id);
+            headID.appendChild(newScript);
+          }
+          
+        </script>
+
+        <input type="text" id="card_stuff_tracker" value="is_off" style="display:none;"/>
+        
+        <div id="cardPayment" class="col-md-12" style="display: none;">
+          
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="card-name">Card Holder Name</label>
+              <input type="text" id="card-name" name="card-name" class="form-control"/>
+            </div>
+          </div>
+
+          <div id="cardDiv" class="cardDiv col-md-12" >
+            <label for="card-element">Enter your Card Information</label>
+            <!-- A Stripe Element will be inserted here-->
+            <div id="card-element" class="StripeElement"></div>
+            <!-- Used to display form errors.  -->
+            <div id="card-errors" role="alert" class="text-danger mb-3"></div>
+          </div>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        </div>
+        
+      </div>
+      <button id="submit-btn" type="submit" class="btn btn-dark button-style btn-lg"
+        style="width:250px; font-size:23px;"
+      >
+        Buy now
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- <script id="stripe" type="text/javascript" src="https://js.stripe.com/v3/"></script>
+<script id="checkout" type="text/javascript" src="javascripts/checkout.js"></script> -->
+
+
+<%- include ../partials/footer %>

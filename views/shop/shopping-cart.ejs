@@ -1,0 +1,103 @@
+<%- include ../partials/header %> <%- include ../partials/categories-navbar %>
+<div class="container cart">
+  <% if (cart != null && !cart.paid ) { %>
+  <div class="row">
+    <div class="col-md-11 col-sm-12 m-auto table-responsive">
+      <table class="table text-center">
+        <thead>
+          <tr >
+            <th>Product</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>Quantity</th>
+            <th>&nbsp;</th>
+            <th>Total</th>
+            <th>Subtotal</th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% products.forEach( product => { %> <% if(product != null) {%>
+          <tr class="my-auto">
+            <td>
+              <a
+              href="/products/<%=product.category[0].slug%>/<%=product._id%>"
+            >
+              <img src="<%=product.imagePath%>" width="150" height="150" class="img-small image-fluid" alt="image thumbnail" />
+              </a>
+            </td>
+            <td>
+              <div class="float-left mb-3">
+                <a class="title-link"
+                href="/products/<%=product.category.slug%>/<%=product._id%>"
+              >
+                <h6 class="text-left"><%= product.title %></h6> 
+                <p class="text-left">Product No: <%= product.productCode %></p>
+              </div>
+              
+              </a>
+            </td>
+            <td class="text-center">
+              <a href="/add-to-cart/<%=product._id%>"
+                ><i class="fa fa-plus-square" aria-hidden="true"></i
+              > </a>
+            </td>
+            <td class="text-center">
+              <p class="qty-display pt-1">
+              <%= product.qty %>
+            </p>
+          </td>
+            <td class="text-center" >
+              <a href="/reduce/<%=product._id%>"
+                ><i class="fa fa-minus-square" aria-hidden="true"></i
+              ></a>
+            </td>
+            <td>RS:<%= product.price %></td>
+            <td>RS:<%= product.totalPrice %></td>
+            <td>
+              <a
+                href="/removeAll/<%=product._id%>"
+                class="btn btn-danger btn-sm button-style-danger"
+                >Remove all</a
+              >
+            </td>
+          </tr>
+          <% } %> <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<hr>
+  <div class="row mt-4 mr-auto">
+    <div class="col-md-11 col-sm-12 m-auto">
+      <strong>Total: RS <%= cart.totalCost %> </strong>
+    </div>
+  </div>
+  <div class="row mt-2 mr-auto">
+    <div class="col-md-11 col-sm-12 m-auto mt-2 mb-2">
+      <a href="/checkout" style="text-align: center; width:300px" class="btn btn-dark button-style btn-lg">Buy Now </a>
+    </div>
+    
+    <div class="col-md-11 col-sm-12 m-auto mt-2 mb-2">
+      <a href="/"  style="width:300px;  text-align:center;" class="btn btn-dark button-style btn-lg">Add more Items?</a>
+    </div>
+  </div>
+  <% } else { %>
+  <div class="row col-md-12">
+
+    <div class="col-md-4 col-sm-9 m-auto">
+      <h2>No items in the cart</h2>
+    </div>
+
+    <div class="col-md-4 col-sm-9 m-auto mt-3 ">
+      <a href="/" class="btn btn-dark button-style btn-lg">
+        Add Products Here
+      </a> 
+    </div>
+
+  </div>
+
+  <% } %>
+</div>
+
+<%- include ../partials/footer %>

@@ -1,0 +1,107 @@
+<%- include ../partials/header %>
+    <%- include ../partials/categories-navbar%>
+
+<div class="container order-confirmation mt-2 mb-2">
+   <center>
+        <div class="col-md-6 col-sm-12 mt-3">
+            <img src="/images/shop-icon.jpg" width="50px" height="50px" alt="">
+            <h1>BetterYou</h1>
+            <h2>Your Order is on its way!</h2>
+        </div>
+   </center>
+            <div class="row">
+                <div class="col-md-8 col-sm-12 mt-3 mb-3 m-auto">
+                    <h2>
+                        <%= recieverName %> thank you for Shopping with Us!
+                        <br>
+                        You can view summary of your order below.
+                        <br>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="order-summary mt-3 mb-3">
+                <h1>Summary</h1>
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 style="color: blue;"> Order Number: <span style="color: black;"><%= orderNumber %></span> </h4>
+                        <h4 style="color: blue;"> Order Date : <span style="color: black;"><%= moment(orderDate).format('MMM DD YYYY') %></span> </h4>
+                        <h4 style="color: blue;"> Order Total : <span style="color: black;">RS <%= total %></span> </h4>
+                    </div>
+                    <div class="col-md-5">
+                        <h4 style="color: blue;">Shipping Address: <span style="color: black;"> <%= yourAddress %> </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-3 mb-3">
+                <hr/>
+                <h1 style="font-family:sans-serif; color:blue">Order Detail</h1>
+                <hr/>
+                <div class="row">
+                    <div class="col-md-5">
+                        <h2>Items Name</h2>
+                    </div>
+                    <div class="col-md-4">
+                        <h2>Quantity</h2>
+                    </div>
+                    <div class="col-md-3">
+                        <h2>Price</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row ">
+                <% for(item in items) { %>
+                    <div class="col-md-5">
+                        <h4> <%= items[item].title %> </h4>
+                    </div>
+                    <div class="col-md-4">
+                        <h4> <%= items[item].qty %> </h4>
+                    </div>
+                    <div class="col-md-3">
+                        <h4> Rs: <%= items[item].price %> </h4>
+                    </div>
+                    <% } %>
+            </div>
+            <hr />
+
+            <div class="mt-3 mb-3">
+                <h1>Order Total</h1>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <h3>Items     </h3>
+                        <h3>Subtotal  </h3>
+                        <hr />
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <h4> <%= quantity %> item(s) </h4>
+                        <h4> Rs <%= total %> </h4>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="color: blue;">Do you have questions?</h2>
+            <p>
+                <h4>Please do not hesitate to
+                <a href="/pages/contact-us"><u>contact us</u></a> through our emails or
+                phone numbers</h4>
+            </p>
+
+            
+
+        </div>
+
+        <div class="container mt-2 mb-2">
+            <div class="col-md-10 col-sm-9 m-2 mt-3">
+                <a href="/" class="btn btn-block btn-secondary mt-3 mb-3 button-style">
+                    <h2>Shop More with Us</h2>
+                </a>
+            </div>
+
+        </div>
+
+
+    
+        <%- include ../partials/footer %>
